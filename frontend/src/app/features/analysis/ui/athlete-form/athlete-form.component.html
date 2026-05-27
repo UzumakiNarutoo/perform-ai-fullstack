@@ -1,0 +1,25 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Athlete Analysis</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <ion-input
+        label="Athlete name"
+        labelPlacement="floating"
+        formControlName="athlete"
+        placeholder="e.g. Demo Athlete"
+      ></ion-input>
+
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="form.invalid || loading"
+        class="ion-margin-top"
+      >
+        <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
+        {{ loading ? 'Analysing…' : 'Run Analysis' }}
+      </ion-button>
+    </form>
+  </ion-card-content>
+</ion-card>

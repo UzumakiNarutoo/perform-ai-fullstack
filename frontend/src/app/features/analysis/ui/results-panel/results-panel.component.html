@@ -1,0 +1,57 @@
+<ng-container [ngSwitch]="state.status">
+
+  <ng-container *ngSwitchCase="'idle'">
+    <p class="ion-text-center ion-padding">Enter an athlete name above to run the analysis.</p>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'submitting'">
+    <div class="ion-text-center ion-padding">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Submitting…</p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'polling'">
+    <div class="ion-text-center ion-padding">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Processing biomechanics…</p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'success'">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Results — {{ state.data?.id | slice: 0 : 8 }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="full">
+          <ion-item>
+            <ion-label>
+              <h3>Foot Contact</h3>
+              <p>{{ state.data?.foot_contact | number: '1.2-2' }} s</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h3>Foot Off</h3>
+              <p>{{ state.data?.foot_off | number: '1.2-2' }} s</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h3>Turning Point</h3>
+              <p>{{ state.data?.turning_point | number: '1.2-2' }} s</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'error'">
+    <div class="ion-padding">
+      <ion-note color="danger">{{ state.error }}</ion-note>
+    </div>
+  </ng-container>
+
+</ng-container>
