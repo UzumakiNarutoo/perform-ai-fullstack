@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-athlete-form',
   templateUrl: './athlete-form.component.html',
+  standalone: false,
 })
 export class AthleteFormComponent implements OnInit {
   @Input() loading = false;

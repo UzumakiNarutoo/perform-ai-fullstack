@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perform AI</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <app-athlete-form
+    [loading]="store.isLoading()"
+    (submitted)="onSubmitted($event)"
+  ></app-athlete-form>
+
+  <app-results-panel [state]="store.state()"></app-results-panel>
+</ion-content>
