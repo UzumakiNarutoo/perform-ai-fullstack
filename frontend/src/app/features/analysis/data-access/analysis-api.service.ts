@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -20,8 +20,7 @@ export interface AnalysisResponse {
 @Injectable({ providedIn: 'root' })
 export class AnalysisApiService {
   private readonly base = `${environment.apiUrl}/analysis`;
-
-  constructor(private readonly http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   create(req: CreateAnalysisRequest): Observable<AnalysisResponse> {
     return this.http.post<AnalysisResponse>(this.base, req);

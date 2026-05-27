@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -11,8 +11,7 @@ export class AthleteFormComponent implements OnInit {
   @Output() submitted = new EventEmitter<string>();
 
   form!: FormGroup;
-
-  constructor(private readonly fb: FormBuilder) {}
+  private readonly fb = inject(FormBuilder);
 
   ngOnInit(): void {
     this.form = this.fb.group({

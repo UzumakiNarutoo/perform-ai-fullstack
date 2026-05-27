@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { AnalysisStore } from './data-access/analysis.store';
 
@@ -8,19 +8,15 @@ import { AnalysisStore } from './data-access/analysis.store';
   standalone: false,
 })
 export class AnalysisPage {
-  readonly store = this.analysisStore;
+  readonly store = inject(AnalysisStore);
+  private readonly toastCtrl = inject(ToastController);
 
-  constructor(
-    private readonly analysisStore: AnalysisStore,
-    private readonly toastCtrl: ToastController,
-  ) {
-    effect(() => {
-      const error = this.store.state().error;
-      if (error) {
-        void this.showErrorToast(error);
-      }
-    });
-  }
+  private readonly errorEffect = effect(() => {
+    const error = this.store.state().error;
+    if (error) {
+      void this.showErrorToast(error);
+    }
+  });
 
   onSubmitted(athlete: string): void {
     this.store.submit(athlete);

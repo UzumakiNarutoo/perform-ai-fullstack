@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { timer } from 'rxjs';
 import { switchMap, takeWhile, take } from 'rxjs/operators';
 import { AnalysisApiService, AnalysisResponse } from './analysis-api.service';
@@ -13,6 +13,7 @@ export interface AnalysisState {
 
 @Injectable({ providedIn: 'root' })
 export class AnalysisStore {
+  private readonly api = inject(AnalysisApiService);
   private readonly _state = signal<AnalysisState>({
     status: 'idle',
     data: null,
@@ -25,8 +26,6 @@ export class AnalysisStore {
     const s = this._state().status;
     return s === 'submitting' || s === 'polling';
   });
-
-  constructor(private readonly api: AnalysisApiService) {}
 
   submit(athlete: string): void {
     this._state.set({ status: 'submitting', data: null, error: null });

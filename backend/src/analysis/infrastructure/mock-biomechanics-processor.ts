@@ -13,9 +13,9 @@ export class MockBiomechanicsProcessor {
     }
 
     return {
-      foot_contact: rand(0.25, 0.40),
-      foot_off: rand(0.95, 1.20),
-      turning_point: rand(1.10, 1.35),
+      foot_contact: rand(0.25, 0.4),
+      foot_off: rand(0.95, 1.2),
+      turning_point: rand(1.1, 1.35),
     };
   }
 }

@@ -6,11 +6,12 @@ import { AnalysisRepositoryPort } from '../application/ports/analysis.repository
 export class InMemoryAnalysisRepository implements AnalysisRepositoryPort {
   private readonly store = new Map<string, Analysis>();
 
-  async save(analysis: Analysis): Promise<void> {
+  save(analysis: Analysis): Promise<void> {
     this.store.set(analysis.id, analysis);
+    return Promise.resolve();
   }
 
-  async findById(id: string): Promise<Analysis | undefined> {
-    return this.store.get(id);
+  findById(id: string): Promise<Analysis | undefined> {
+    return Promise.resolve(this.store.get(id));
   }
 }

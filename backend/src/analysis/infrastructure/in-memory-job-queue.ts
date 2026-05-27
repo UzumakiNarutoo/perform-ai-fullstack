@@ -12,9 +12,10 @@ export class InMemoryJobQueue implements JobQueuePort {
     private readonly processor: MockBiomechanicsProcessor,
   ) {}
 
-  async enqueue(analysisId: string): Promise<void> {
+  enqueue(analysisId: string): Promise<void> {
     const delay = Math.floor(Math.random() * 700) + 800; // 800–1500ms
     setTimeout(() => void this.run(analysisId), delay);
+    return Promise.resolve();
   }
 
   private async run(analysisId: string): Promise<void> {

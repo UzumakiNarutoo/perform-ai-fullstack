@@ -15,14 +15,22 @@ export class AnalysisController {
 
   @Post()
   @HttpCode(202)
-  @ApiResponse({ status: 202, description: 'Analysis queued', type: AnalysisResponseDto })
+  @ApiResponse({
+    status: 202,
+    description: 'Analysis queued',
+    type: AnalysisResponseDto,
+  })
   async create(@Body() dto: CreateAnalysisDto): Promise<AnalysisResponseDto> {
     const analysis = await this.createAnalysis.execute(dto.athlete);
     return AnalysisResponseDto.fromEntity(analysis);
   }
 
   @Get(':id')
-  @ApiResponse({ status: 200, description: 'Analysis result', type: AnalysisResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Analysis result',
+    type: AnalysisResponseDto,
+  })
   @ApiResponse({ status: 404, description: 'Not found' })
   async getById(@Param('id') id: string): Promise<AnalysisResponseDto> {
     const analysis = await this.getAnalysis.execute(id);

@@ -5,6 +5,14 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
+interface AnalysisBody {
+  id: string;
+  status: string;
+  foot_contact?: number;
+  foot_off?: number;
+  turning_point?: number;
+}
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -17,7 +25,8 @@ async function pollUntilDone(
   const deadline = Date.now() + maxMs;
   while (Date.now() < deadline) {
     const res = await request(app.getHttpServer()).get(`/analysis/${id}`);
-    if (res.body.status === 'COMPLETED' || res.body.status === 'FAILED') {
+    const body = res.body as AnalysisBody;
+    if (body.status === 'COMPLETED' || body.status === 'FAILED') {
       return res;
     }
     await sleep(200);
@@ -51,7 +60,7 @@ describe('Analysis API (e2e)', () => {
   it('GET /health returns 200 with status ok', async () => {
     const res = await request(app.getHttpServer()).get('/health');
     expect(res.status).toBe(200);
-    expect(res.body.status).toBe('ok');
+    expect((res.body as { status: string }).status).toBe('ok');
   });
 
   it('POST /analysis returns 202 with id and PENDING status', async () => {
@@ -60,8 +69,9 @@ describe('Analysis API (e2e)', () => {
       .send({ athlete: 'Demo Athlete' });
 
     expect(res.status).toBe(202);
-    expect(typeof res.body.id).toBe('string');
-    expect(res.body.status).toBe('PENDING');
+    const body = res.body as AnalysisBody;
+    expect(typeof body.id).toBe('string');
+    expect(body.status).toBe('PENDING');
   });
 
   it('POST /analysis then GET polls to COMPLETED with correct metrics', async () => {
@@ -70,16 +80,17 @@ describe('Analysis API (e2e)', () => {
       .send({ athlete: 'Demo Athlete' });
 
     expect(post.status).toBe(202);
-    const { id } = post.body as { id: string };
+    const { id } = post.body as AnalysisBody;
 
     const result = await pollUntilDone(app, id);
+    const resultBody = result.body as AnalysisBody;
 
     expect(result.status).toBe(200);
-    expect(result.body.id).toBe(id);
-    expect(result.body.status).toBe('COMPLETED');
-    expect(result.body.foot_contact).toBe(0.32);
-    expect(result.body.foot_off).toBe(1.08);
-    expect(result.body.turning_point).toBe(1.22);
+    expect(resultBody.id).toBe(id);
+    expect(resultBody.status).toBe('COMPLETED');
+    expect(resultBody.foot_contact).toBe(0.32);
+    expect(resultBody.foot_off).toBe(1.08);
+    expect(resultBody.turning_point).toBe(1.22);
   }, 10000);
 
   it('POST /analysis returns 400 when athlete is empty', async () => {
@@ -91,9 +102,7 @@ describe('Analysis API (e2e)', () => {
   });
 
   it('POST /analysis returns 400 when body is missing', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/analysis')
-      .send({});
+    const res = await request(app.getHttpServer()).post('/analysis').send({});
 
     expect(res.status).toBe(400);
   });
@@ -105,4 +114,3 @@ describe('Analysis API (e2e)', () => {
     expect(res.status).toBe(404);
   });
 });
-

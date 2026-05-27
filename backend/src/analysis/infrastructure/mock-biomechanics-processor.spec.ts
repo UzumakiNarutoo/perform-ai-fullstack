@@ -32,12 +32,12 @@ describe('MockBiomechanicsProcessor', () => {
       const result = processor.process('Jane Doe');
 
       expect(result.foot_contact).toBeGreaterThanOrEqual(0.25);
-      expect(result.foot_contact).toBeLessThanOrEqual(0.40);
+      expect(result.foot_contact).toBeLessThanOrEqual(0.4);
 
       expect(result.foot_off).toBeGreaterThanOrEqual(0.95);
-      expect(result.foot_off).toBeLessThanOrEqual(1.20);
+      expect(result.foot_off).toBeLessThanOrEqual(1.2);
 
-      expect(result.turning_point).toBeGreaterThanOrEqual(1.10);
+      expect(result.turning_point).toBeGreaterThanOrEqual(1.1);
       expect(result.turning_point).toBeLessThanOrEqual(1.35);
     });
 
