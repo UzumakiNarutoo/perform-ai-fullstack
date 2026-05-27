@@ -155,6 +155,75 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Submit analysis — 400 missing body",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('status is 400', () => pm.response.to.have.status(400));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/analysis",
+          "host": ["{{baseUrl}}"],
+          "path": ["analysis"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Submit analysis — random athlete",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "pm.collectionVariables.set('analysisId', json.id);",
+              "pm.test('status is 202', () => pm.response.to.have.status(202));",
+              "pm.test('status is PENDING', () => pm.expect(json.status).to.eql('PENDING'));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"athlete\": \"Jane Smith\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/analysis",
+          "host": ["{{baseUrl}}"],
+          "path": ["analysis"]
+        }
+      },
+      "response": []
     }
   ]
 }
